@@ -1,4 +1,6 @@
 // server/src/utils/crypto.js
+import dotenv from "dotenv";
+dotenv.config();
 import crypto from 'crypto';
 
 const KEY_BASE64 = process.env.ENCRYPTION_KEY;
