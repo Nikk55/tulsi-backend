@@ -1,29 +1,36 @@
-// server/src/utils/crypto.js
-// import dotenv from "dotenv";
-// dotenv.config();
-import crypto from 'crypto';
-console.log("DEBUG ENCRYPTION_KEY:", JSON.stringify(process.env.ENCRYPTION_KEY));
-const KEY_BASE64 = process.env.ENCRYPTION_KEY;
-if (!KEY_BASE64) throw new Error('ENCRYPTION_KEY missing in .env');
-const KEY = Buffer.from(KEY_BASE64, 'base64');
-if (KEY.length !== 32) throw new Error('ENCRYPTION_KEY must be 32 bytes (base64)');
+// src/utils/crypto.js
+import dotenv from "dotenv";
+dotenv.config(); // Ensure env loads here too
 
-export function encryptText(plain) {
-  const iv = crypto.randomBytes(12);
-  const cipher = crypto.createCipheriv('aes-256-gcm', KEY, iv);
-  const encrypted = Buffer.concat([cipher.update(plain, 'utf8'), cipher.final()]);
-  const tag = cipher.getAuthTag();
-  return Buffer.concat([iv, tag, encrypted]).toString('base64');
+import crypto from "crypto";
+
+const KEY_BASE64 = process.env.ENCRYPTION_KEY;
+
+if (!KEY_BASE64) {
+  console.error("❌ ENCRYPTION_KEY NOT FOUND — Check Railway Variables");
+  throw new Error("ENCRYPTION_KEY missing");
 }
 
-export function decryptText(payloadB64) {
-  if (!payloadB64) return null;
-  const data = Buffer.from(payloadB64, 'base64');
-  const iv = data.slice(0, 12);
-  const tag = data.slice(12, 28);
-  const encrypted = data.slice(28);
-  const decipher = crypto.createDecipheriv('aes-256-gcm', KEY, iv);
+const KEY = Buffer.from(KEY_BASE64, "base64");
+
+// AES-256-GCM Encrypt
+export function encryptText(text) {
+  const iv = crypto.randomBytes(12);
+  const cipher = crypto.createCipheriv("aes-256-gcm", KEY, iv);
+  let encrypted = cipher.update(text, "utf8", "base64");
+  encrypted += cipher.final("base64");
+  const tag = cipher.getAuthTag().toString("base64");
+  return `${iv.toString("base64")}:${encrypted}:${tag}`;
+}
+
+// AES-256-GCM Decrypt
+export function decryptText(data) {
+  const [ivStr, encrypted, tagStr] = data.split(":");
+  const iv = Buffer.from(ivStr, "base64");
+  const tag = Buffer.from(tagStr, "base64");
+  const decipher = crypto.createDecipheriv("aes-256-gcm", KEY, iv);
   decipher.setAuthTag(tag);
-  const decrypted = Buffer.concat([decipher.update(encrypted), decipher.final()]);
-  return decrypted.toString('utf8');
+  let decrypted = decipher.update(encrypted, "base64", "utf8");
+  decrypted += decipher.final("utf8");
+  return decrypted;
 }
