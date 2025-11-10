@@ -2,7 +2,7 @@
 // import dotenv from "dotenv";
 // dotenv.config();
 import crypto from 'crypto';
-
+console.log("DEBUG ENCRYPTION_KEY:", JSON.stringify(process.env.ENCRYPTION_KEY));
 const KEY_BASE64 = process.env.ENCRYPTION_KEY;
 if (!KEY_BASE64) throw new Error('ENCRYPTION_KEY missing in .env');
 const KEY = Buffer.from(KEY_BASE64, 'base64');
