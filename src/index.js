@@ -1,7 +1,6 @@
-// import dotenv from "dotenv";
-// dotenv.config();
-console.log("DEBUG ENCRYPTION_KEY:", JSON.stringify(process.env.ENCRYPTION_KEY));
-// import dotenv from 'dotenv';
+import dotenv from "dotenv";
+dotenv.config({ path: ".env" });
+console.log("LOADED ENCRYPTION_KEY:", process.env.ENCRYPTION_KEY);
 import express from 'express';
 import cors from 'cors';
 import authRoutes from './routes/auth.js';
