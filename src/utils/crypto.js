@@ -1,9 +1,13 @@
+import dotenv from "dotenv";
+dotenv.config();
+
 import crypto from "crypto";
 
 const KEY_BASE64 = process.env.ENCRYPTION_KEY;
 
-if (!KEY_BASE64) {
-  console.error("❌ ENCRYPTION_KEY NOT FOUND — Check Railway Variables");
+console.log("DEBUG: ENCRYPTION_KEY =", KEY_BASE64);
+
+if (!KEY_BASE64 || KEY_BASE64.trim() === "") {
   throw new Error("ENCRYPTION_KEY missing");
 }
 
