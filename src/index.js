@@ -40,6 +40,7 @@ app.get('/api/protected', (req, res) => {
   res.json({ ok: true });
 });
 
+console.log("ENCRYPTION_KEY =>", JSON.stringify(process.env.ENCRYPTION_KEY));
 // ✅ Start server
 const PORT = process.env.PORT || 4000;
 app.listen(PORT, () => {
