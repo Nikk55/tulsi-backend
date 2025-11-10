@@ -1,5 +1,5 @@
-import dotenv from "dotenv";
-dotenv.config();
+// import dotenv from "dotenv";
+// dotenv.config();
 console.log("DEBUG ENCRYPTION_KEY:", JSON.stringify(process.env.ENCRYPTION_KEY));
 // import dotenv from 'dotenv';
 import express from 'express';

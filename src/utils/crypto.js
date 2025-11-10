@@ -1,6 +1,6 @@
 // src/utils/crypto.js
-import dotenv from "dotenv";
-dotenv.config(); // Ensure env loads here too
+// import dotenv from "dotenv";
+// dotenv.config(); 
 
 import crypto from "crypto";
 
