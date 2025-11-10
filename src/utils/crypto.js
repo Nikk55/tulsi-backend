@@ -1,7 +1,3 @@
-// src/utils/crypto.js
-// import dotenv from "dotenv";
-// dotenv.config(); 
-
 import crypto from "crypto";
 
 const KEY_BASE64 = process.env.ENCRYPTION_KEY;
@@ -13,7 +9,6 @@ if (!KEY_BASE64) {
 
 const KEY = Buffer.from(KEY_BASE64, "base64");
 
-// AES-256-GCM Encrypt
 export function encryptText(text) {
   const iv = crypto.randomBytes(12);
   const cipher = crypto.createCipheriv("aes-256-gcm", KEY, iv);
@@ -23,7 +18,6 @@ export function encryptText(text) {
   return `${iv.toString("base64")}:${encrypted}:${tag}`;
 }
 
-// AES-256-GCM Decrypt
 export function decryptText(data) {
   const [ivStr, encrypted, tagStr] = data.split(":");
   const iv = Buffer.from(ivStr, "base64");
